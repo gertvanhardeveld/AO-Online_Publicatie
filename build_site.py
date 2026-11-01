@@ -189,13 +189,13 @@ def sipoc_svg(d, root):
                 if it.get('communicatie'):
                     # twee regels label plus communicatieregel: label hoger en compacter, zodat niets overlapt
                     two = len(ll) > 1
-                    out.append(svg_textblock(ll, X[kl] + CW[kl] / 2, icy - (8 if two else 5), 'io-t', lh=13 if two else 15))
-                    out.append(f'<text class="io-sub" x="{X[kl] + CW[kl] / 2}" y="{icy + (16 if two else 13)}" text-anchor="middle">{e(wrap_text(it["communicatie"], 24)[0])}</text>')
+                    out.append(svg_textblock(ll, X[kl] + CW[kl] / 2, icy - (8 if two else 5), f'io-t{ext}', lh=13 if two else 15))
+                    out.append(f'<text class="io-sub{ext}" x="{X[kl] + CW[kl] / 2}" y="{icy + (16 if two else 13)}" text-anchor="middle">{e(wrap_text(it["communicatie"], 24)[0])}</text>')
                 else:
-                    out.append(svg_textblock(ll, X[kl] + CW[kl] / 2, icy, 'io-t'))
+                    out.append(svg_textblock(ll, X[kl] + CW[kl] / 2, icy, f'io-t{ext}'))
                 # herkomst / bestemming
                 tgt, _ = link_target(it['waar'])
-                box = f'<rect class="party{ext}" x="{X[kr]}" y="{iy}" width="{CW[kr]}" height="{ITEM_H}" rx="{ITEM_H / 2 if not it["intern"] else 4}"/>' + svg_textblock(wrap_text(it['waar'] or '—', 20)[:2], X[kr] + CW[kr] / 2, icy, 'party-t')
+                box = f'<rect class="party{ext}" x="{X[kr]}" y="{iy}" width="{CW[kr]}" height="{ITEM_H}" rx="{ITEM_H / 2 if not it["intern"] else 4}"/>' + svg_textblock(wrap_text(it['waar'] or '—', 20)[:2], X[kr] + CW[kr] / 2, icy, f'party-t{ext}')
                 out.append(f'<a href="{root}{tgt}" class="act-link">{box}</a>' if tgt else box)
                 # pijlen
                 if side == 'in':
@@ -358,7 +358,7 @@ for a in D['activiteiten']:
         for it in io:
             tgt, _ = link_target(it['waar'])
             waar = f'<a href="{root}{tgt}">{e(it["waar"])}</a>' if tgt else e(it['waar'])
-            rows += f'<tr><td><span class="dir dir-{it["richting"].lower()}">{e(it["richting"])}</span></td><td><strong>{e(it["label"])}</strong></td><td>{"Van" if it["richting"] == "Input" else "Naar"} {waar} <span class="tag{"" if it["intern"] else " tag-ext"}">{"intern" if it["intern"] else "extern"}</span></td><td>{e(it["communicatie"])}</td></tr>'
+            rows += f'<tr><td><span class="dir dir-{it["richting"].lower()}">{e(it["richting"])}</span></td><td><strong>{e(it["label"])}</strong></td><td>{"Van" if it["richting"] == "Input" else "Naar"} {waar} <span class="tag {"tag-int" if it["intern"] else "tag-ext"}">{"intern" if it["intern"] else "extern"}</span></td><td>{e(it["communicatie"])}</td></tr>'
         body += f'<section class="sec"><h2>Input en output</h2><div class="tbl"><table><thead><tr><th>Richting</th><th>Wat</th><th>Herkomst of bestemming</th><th>Via</th></tr></thead><tbody>{rows}</tbody></table></div></section>'
     for r in a.get('risicos', []):
         ms = ''.join(f'''<li><strong>{e(m["naam"])}</strong>{"<p>" + e(m.get("Beheersmaatregel")) + "</p>" if m.get("Beheersmaatregel") else ""}{"<small>Verantwoordelijk: " + e(m.get("Verantwoordelijke")) + "</small>" if m.get("Verantwoordelijke") else ""}</li>''' for m in r.get('maatregelen', []))

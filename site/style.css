@@ -13,6 +13,10 @@
   --ext-soft: #FBF0E4;
   --risk: #B3372B;
   --risk-soft: #FBEAE7;
+  /* SIPOC: intern blauw, extern grijs (zoals in AO-online) */
+  --int: #2F78BC; --on-int: #FFFFFF; --int-line: #2F78BC;
+  --int-soft: #A9CBEA; --int-soft-line: #3F86C6; --on-int-soft: #17212B;
+  --xg: #D6D9DD; --xg-line: #C2C7CD; --on-xg: #2E3740;
   --ok: #2F7A4F;
   --font-display: "IBM Plex Sans Condensed", "Arial Narrow", system-ui, sans-serif;
   --font-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -24,12 +28,16 @@
     --bg: #0F151B; --surface: #161F28; --ink: #E3E9EF; --muted: #93A0AD; --line: #283542; --soft: #1D2833;
     --accent: #78AEDD; --accent-soft: #1A2C3D; --on-accent: #0F151B; --ext: #E1A262; --ext-soft: #2B2116;
     --risk: #EE8A7E; --risk-soft: #2D1B19; --ok: #7CC79C; color-scheme: dark;
+    --int: #3B82C4; --on-int: #FFFFFF; --int-line: #5B9AD3; --int-soft: #1F3A55; --int-soft-line: #4A86BE; --on-int-soft: #E3E9EF;
+    --xg: #2C343D; --xg-line: #3E4853; --on-xg: #D5DCE3;
   }
 }
 :root[data-theme="dark"] {
   --bg: #0F151B; --surface: #161F28; --ink: #E3E9EF; --muted: #93A0AD; --line: #283542; --soft: #1D2833;
   --accent: #78AEDD; --accent-soft: #1A2C3D; --on-accent: #0F151B; --ext: #E1A262; --ext-soft: #2B2116;
   --risk: #EE8A7E; --risk-soft: #2D1B19; --ok: #7CC79C; color-scheme: dark;
+    --int: #3B82C4; --on-int: #FFFFFF; --int-line: #5B9AD3; --int-soft: #1F3A55; --int-soft-line: #4A86BE; --on-int-soft: #E3E9EF;
+    --xg: #2C343D; --xg-line: #3E4853; --on-xg: #D5DCE3;
 }
 
 * { box-sizing: border-box; }
@@ -94,29 +102,32 @@ mark { background: transparent; color: var(--accent); font-weight: 600; }
 .legend { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: .8rem; color: var(--muted); }
 .legend li { display: flex; gap: 6px; align-items: center; }
 .lg { width: 14px; height: 12px; border-radius: 3px; border: 1.5px solid var(--line); background: var(--surface); display: inline-block; }
-.lg-ext { border-color: var(--ext); background: var(--ext-soft); }
-.lg-act { background: var(--accent); border-color: var(--accent); }
+.lg-int { border-color: var(--int-line); background: var(--int); }
+.lg-ext { border-color: var(--xg-line); background: var(--xg); }
+.lg-act { background: var(--surface); border-color: var(--ink); }
 .hint { font-size: .82rem; color: var(--muted); }
 
 /* SIPOC-schema */
 .schema { margin: 0; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); overflow-x: auto; padding: 14px; }
 .sipoc { display: block; max-width: none; height: auto; font-family: var(--font-body); }
-.sipoc .lane { fill: var(--accent-soft); opacity: .55; }
+.sipoc .lane { fill: var(--soft); opacity: .6; }
 .sipoc .col-h { fill: var(--muted); font-size: 11px; letter-spacing: .1em; font-weight: 600; }
-.sipoc .act { fill: var(--accent); }
-.sipoc .act-t { fill: var(--on-accent); font-size: 13px; font-weight: 600; }
-.sipoc .act-sub { fill: var(--on-accent); font-size: 11px; opacity: .85; }
-.sipoc .act-num { fill: var(--on-accent); font-size: 9.5px; font-family: var(--font-mono); opacity: .75; }
-.sipoc .io { fill: var(--surface); stroke: var(--line); stroke-width: 1.5; }
-.sipoc .party { fill: var(--soft); stroke: var(--line); stroke-width: 1.5; }
-.sipoc .io.ext, .sipoc .party.ext { fill: var(--ext-soft); stroke: var(--ext); }
-.sipoc .io-t { fill: var(--ink); font-size: 12px; font-weight: 500; }
-.sipoc .io-sub { fill: var(--muted); font-size: 10px; }
-.sipoc .party-t { fill: var(--ink); font-size: 11.5px; }
+.sipoc .act { fill: var(--surface); stroke: var(--ink); stroke-width: 1.5; }
+.sipoc .act-t { fill: var(--ink); font-size: 13px; font-weight: 600; }
+.sipoc .act-sub { fill: var(--muted); font-size: 11px; }
+.sipoc .act-num { fill: var(--muted); font-size: 9.5px; font-family: var(--font-mono); }
+/* intern: input/output donkerblauw, herkomst/bestemming lichtblauw; extern: grijs */
+.sipoc .io { fill: var(--int); stroke: var(--int-line); stroke-width: 1.5; }
+.sipoc .io-t { fill: var(--on-int); font-size: 12px; font-weight: 500; }
+.sipoc .io-sub { fill: var(--on-int); opacity: .85; font-size: 10px; }
+.sipoc .party { fill: var(--int-soft); stroke: var(--int-soft-line); stroke-width: 1.5; }
+.sipoc .party-t { fill: var(--on-int-soft); font-size: 11.5px; }
+.sipoc .io.ext, .sipoc .party.ext { fill: var(--xg); stroke: var(--xg-line); }
+.sipoc .io-t.ext, .sipoc .io-sub.ext, .sipoc .party-t.ext { fill: var(--on-xg); }
 .sipoc .flow { stroke: var(--muted); stroke-width: 1.4; fill: none; }
 .sipoc .arrhead { fill: var(--muted); }
 .sipoc .act-link { cursor: pointer; }
-.sipoc .act-link:hover .act { fill: var(--ink); }
+.sipoc .act-link:hover .act { fill: var(--accent-soft); }
 .sipoc .act-link:hover .party { stroke: var(--accent); }
 .sipoc .act-link:focus-visible { outline: none; }
 .sipoc .act-link:focus-visible rect { stroke: var(--ink); stroke-width: 3; }
@@ -168,7 +179,8 @@ td.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
 .dir-input { color: var(--accent); }
 .dir-output { color: var(--ok); }
 .tag { font-size: .7rem; border: 1px solid var(--line); border-radius: 10px; padding: 0 7px; color: var(--muted); margin-left: 4px; white-space: nowrap; }
-.tag-ext { border-color: var(--ext); color: var(--ext); }
+.tag-int { border-color: var(--int-line); background: var(--int); color: var(--on-int); }
+.tag-ext { border-color: var(--xg-line); background: var(--xg); color: var(--on-xg); }
 .roles, .nlist, .mini { list-style: none; margin: 0; padding: 0; display: grid; gap: 9px; }
 .roles li, .nlist li { display: flex; gap: 10px; align-items: flex-start; }
 .roles li > span:last-child, .nlist li > span:last-child { display: grid; min-width: 0; }
@@ -264,22 +276,22 @@ button.link { font: inherit; background: none; border: 0; padding: 0; color: var
 .vstep::before { content: ""; position: absolute; left: 9px; top: 0; bottom: 0; width: 2px; background: var(--line); }
 .vstep:last-child { padding-bottom: 0; }
 .vstep:last-child::before { bottom: auto; height: 22px; }
-.vact { position: relative; display: grid; gap: 1px; background: var(--accent); color: var(--on-accent); border-radius: 6px; padding: 10px 12px; text-decoration: none; }
-.vact::before { content: ""; position: absolute; left: -25px; top: 13px; width: 14px; height: 14px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 3px var(--bg); }
-.vact .code { color: var(--on-accent); opacity: .75; }
+.vact { position: relative; display: grid; gap: 1px; background: var(--surface); color: var(--ink); border: 1.5px solid var(--ink); border-radius: 6px; padding: 10px 12px; text-decoration: none; }
+.vact::before { content: ""; position: absolute; left: -26.5px; top: 12px; width: 14px; height: 14px; border-radius: 50%; background: var(--ink); box-shadow: 0 0 0 3px var(--bg); }
+.vact .code { color: var(--muted); }
 .vact strong { font-size: 1rem; line-height: 1.3; }
 .vact small { font-size: .82rem; opacity: .85; }
-.vact:hover { filter: brightness(1.1); }
+.vact:hover { background: var(--accent-soft); }
 .vgroup { display: grid; gap: 6px; }
 .vin { padding-right: 20px; }
 .vout { padding-left: 20px; }
-.vio { position: relative; display: grid; gap: 1px; background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 7px 10px; font-size: .9rem; min-width: 0; }
-.vio.ext { background: var(--ext-soft); border-color: var(--ext); }
+.vio { position: relative; display: grid; gap: 1px; background: var(--int); color: var(--on-int); border: 1px solid var(--int-line); border-radius: 6px; padding: 7px 10px; font-size: .9rem; min-width: 0; }
+.vio.ext { background: var(--xg); color: var(--on-xg); border-color: var(--xg-line); }
 .vin .vio::after, .vout .vio::before { position: absolute; left: 50%; color: var(--muted); font-size: .8rem; line-height: 1; transform: translateX(-50%); }
-.vwho { font-size: .72rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); overflow-wrap: anywhere; }
+.vwho { font-size: .72rem; text-transform: uppercase; letter-spacing: .05em; color: inherit; opacity: .85; overflow-wrap: anywhere; }
 .vwho a { color: inherit; }
-.vext { color: var(--ext); font-weight: 600; }
-.vio small { color: var(--muted); font-size: .8rem; }
+.vext { font-weight: 600; }
+.vio small { color: inherit; opacity: .85; font-size: .8rem; }
 @media (max-width: 760px) {
   .flowsec .schema { display: none; }
   .flowsec .vflow { display: grid; }

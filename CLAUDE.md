@@ -20,6 +20,8 @@ Nu: prototype om samen verder te ontwikkelen en te testen op Vercel.
 - Elke pagina is vooraf gegenereerde HTML; zoeken gebeurt in de browser op een zoekindex.
 - Processchema in SIPOC (5 kolommen: herkomst, input, activiteit, output, bestemming) als SVG. Op schermen
   smaller dan 760px een verticale stappenweergave uit dezelfde data, met schakelaar Schema/Stappen.
+- Kleuren in het schema zoals in AO-online: intern blauw (input/output donkerblauw, herkomst/bestemming
+  lichtblauw), extern grijs, activiteit wit met donkere rand.
 - Volgorde van activiteiten: volgorde uit de rollenmatrix, anders de nummering.
 - Elke publicatie krijgt een versie; in productie ook een PDF-momentopname voor audits.
 
