@@ -124,6 +124,10 @@ mark { background: transparent; color: var(--accent); font-weight: 600; }
 .sipoc .party-t { fill: var(--on-int-soft); font-size: 11.5px; }
 .sipoc .io.ext, .sipoc .party.ext { fill: var(--xg); stroke: var(--xg-line); }
 .sipoc .io-t.ext, .sipoc .io-sub.ext, .sipoc .party-t.ext { fill: var(--on-xg); }
+/* pictogram communicatiekanaal */
+.sipoc .ch { fill: none; stroke: var(--on-int); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.sipoc .ch.ext { stroke: var(--on-xg); }
+.ch { width: 1.05em; height: 1.05em; vertical-align: -.18em; margin-right: .3em; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 .sipoc .flow { stroke: var(--muted); stroke-width: 1.4; fill: none; }
 .sipoc .arrhead { fill: var(--muted); }
 .sipoc .act-link { cursor: pointer; }

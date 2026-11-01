@@ -142,6 +142,49 @@ for k in 'sipoc':
 SVG_W = x - GAP + 8
 
 
+# ---------- pictogrammen per communicatiekanaal (zoals in AO-online) ----------
+# Lijnpictogrammen in een 24x24-raster; kleur via currentColor/stroke in de CSS.
+KANAAL_ICON = {
+    'digitaal': '<rect x="4" y="5" width="16" height="11" rx="1"/><path d="M2 19h20"/>',
+    'email': '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/>',
+    'schriftelijk': '<path d="M14 3H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8z"/><path d="M14 3v5h5M8 13h8M8 17h5"/>',
+    'mondeling': '<path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/>',
+    'telefonisch': '<path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/>',
+    'fax': '<path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="8" rx="1"/><path d="M6 14h12v7H6z"/>',
+    'fysiek': '<path d="m3 7 9-4 9 4v10l-9 4-9-4z"/><path d="m3 7 9 4 9-4M12 11v10"/>',
+    'chat': '<path d="M4 5h16v11H9l-5 4z"/><path d="M8.5 10.5h.01M12 10.5h.01M15.5 10.5h.01"/>',
+}
+KANAAL_NAAM = {'digitaal': 'Digitaal', 'email': 'Per e-mail', 'schriftelijk': 'Schriftelijk', 'mondeling': 'Mondeling',
+               'telefonisch': 'Telefonisch', 'fax': 'Fax', 'fysiek': 'Fysiek', 'chat': 'Chat'}
+KANAAL_ALIAS = {'per email': 'email', 'e-mail': 'email', 'email': 'email', 'per e-mail': 'email', 'telefoon': 'telefonisch'}
+
+
+def kanalen(s):
+    """'Digitaal / Per email' -> ['digitaal', 'email']; onbekende kanalen krijgen geen pictogram."""
+    uit = []
+    for deel in (s or '').split('/'):
+        k = deel.strip().lower()
+        k = KANAAL_ALIAS.get(k, k)
+        if k in KANAAL_ICON and k not in uit:
+            uit.append(k)
+    return uit
+
+
+def icon_html(s):
+    """Pictogrammen voor HTML (stappenweergave, tabellen); decoratief, de tekst staat ernaast."""
+    return ''.join(f'<svg class="ch" viewBox="0 0 24 24" aria-hidden="true">{KANAAL_ICON[k]}</svg>' for k in kanalen(s))
+
+
+def icon_svg(s, cx, y, ext, size=12, gap=4):
+    """Rij pictogrammen gecentreerd op cx, bovenkant op y, binnen het SIPOC-schema."""
+    ks = kanalen(s)[:4]
+    if not ks:
+        return ''
+    w = len(ks) * size + (len(ks) - 1) * gap
+    x0 = cx - w / 2
+    return ''.join(f'<svg class="ch{ext}" x="{x0 + i * (size + gap):.1f}" y="{y:.1f}" width="{size}" height="{size}" viewBox="0 0 24 24"><title>{KANAAL_NAAM[k]}</title><rect width="24" height="24" fill="transparent" stroke="none"/>{KANAAL_ICON[k]}</svg>' for i, k in enumerate(ks))
+
+
 def svg_textblock(lines, cx, cy, cls, lh=15):
     y0 = cy - (len(lines) - 1) * lh / 2
     return ''.join(f'<text class="{cls}" x="{cx}" y="{y0 + i * lh:.1f}" text-anchor="middle" dominant-baseline="middle">{e(t)}</text>' for i, t in enumerate(lines))
@@ -186,8 +229,13 @@ def sipoc_svg(d, root):
                 # label (input/output)
                 out.append(f'<rect class="io{ext}" x="{X[kl]}" y="{iy}" width="{CW[kl]}" height="{ITEM_H}" rx="4"/>')
                 ll = wrap_text(it['label'], 20)[:2]
-                if it.get('communicatie'):
-                    # twee regels label plus communicatieregel: label hoger en compacter, zodat niets overlapt
+                if kanalen(it.get('communicatie')):
+                    # zoals in AO-online: pictogram(men) van het kanaal boven het label; tekst als tooltip
+                    two = len(ll) > 1
+                    out.append(icon_svg(it['communicatie'], X[kl] + CW[kl] / 2, iy + (4 if two else 7), ext, size=12 if two else 14))
+                    out.append(svg_textblock(ll, X[kl] + CW[kl] / 2, icy + (9 if two else 8), f'io-t{ext}', lh=13))
+                elif it.get('communicatie'):
+                    # kanaal zonder pictogram: tekstregel onder het label
                     two = len(ll) > 1
                     out.append(svg_textblock(ll, X[kl] + CW[kl] / 2, icy - (8 if two else 5), f'io-t{ext}', lh=13 if two else 15))
                     out.append(f'<text class="io-sub{ext}" x="{X[kl] + CW[kl] / 2}" y="{icy + (16 if two else 13)}" text-anchor="middle">{e(wrap_text(it["communicatie"], 24)[0])}</text>')
@@ -227,7 +275,7 @@ def sipoc_steps(d, root):
         return (f'<div class="vio{ext}"><span class="vwho">{voor} {waar}'
                 f'{"" if it["intern"] else " <span class=vext>extern</span>"}</span>'
                 f'<strong>{e(it["label"])}</strong>'
-                f'{"<small>" + e(it["communicatie"]) + "</small>" if it.get("communicatie") else ""}</div>')
+                f'{"<small>" + icon_html(it["communicatie"]) + e(it["communicatie"]) + "</small>" if it.get("communicatie") else ""}</div>')
     li = ''
     for a in d['acts']:
         ins = [i for i in a.get('io', []) if i['richting'] == 'Input']
@@ -358,7 +406,7 @@ for a in D['activiteiten']:
         for it in io:
             tgt, _ = link_target(it['waar'])
             waar = f'<a href="{root}{tgt}">{e(it["waar"])}</a>' if tgt else e(it['waar'])
-            rows += f'<tr><td><span class="dir dir-{it["richting"].lower()}">{e(it["richting"])}</span></td><td><strong>{e(it["label"])}</strong></td><td>{"Van" if it["richting"] == "Input" else "Naar"} {waar} <span class="tag {"tag-int" if it["intern"] else "tag-ext"}">{"intern" if it["intern"] else "extern"}</span></td><td>{e(it["communicatie"])}</td></tr>'
+            rows += f'<tr><td><span class="dir dir-{it["richting"].lower()}">{e(it["richting"])}</span></td><td><strong>{e(it["label"])}</strong></td><td>{"Van" if it["richting"] == "Input" else "Naar"} {waar} <span class="tag {"tag-int" if it["intern"] else "tag-ext"}">{"intern" if it["intern"] else "extern"}</span></td><td>{icon_html(it["communicatie"])}{e(it["communicatie"])}</td></tr>'
         body += f'<section class="sec"><h2>Input en output</h2><div class="tbl"><table><thead><tr><th>Richting</th><th>Wat</th><th>Herkomst of bestemming</th><th>Via</th></tr></thead><tbody>{rows}</tbody></table></div></section>'
     for r in a.get('risicos', []):
         ms = ''.join(f'''<li><strong>{e(m["naam"])}</strong>{"<p>" + e(m.get("Beheersmaatregel")) + "</p>" if m.get("Beheersmaatregel") else ""}{"<small>Verantwoordelijk: " + e(m.get("Verantwoordelijke")) + "</small>" if m.get("Verantwoordelijke") else ""}</li>''' for m in r.get('maatregelen', []))
