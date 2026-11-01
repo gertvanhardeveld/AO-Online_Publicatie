@@ -470,7 +470,16 @@ index_body = f'''<section class="hero">
 open(f'{OUT}/index.html', 'w', encoding='utf-8').write(page('Kwaliteitshandboek Publicatie', index_body, '', full=not ARTIFACT))
 with open(os.path.join(OUT, 'robots.txt'), 'w') as fh:
     fh.write('User-agent: *\nDisallow: /\n')
-for asset in ('style.css', 'app.js') + (() if ARTIFACT else ('vercel.json',)):
+if not ARTIFACT:
+    # vercel.json in de hoofdmap verwijst naar site/; in site/ zelf alleen de headers,
+    # zodat het project werkt met Root Directory leeg of op 'site'.
+    vc = json.load(open(os.path.join(HERE, 'vercel.json'), encoding='utf-8'))
+    for k in ('framework', 'installCommand', 'buildCommand', 'outputDirectory'):
+        vc.pop(k, None)
+    with open(os.path.join(OUT, 'vercel.json'), 'w', encoding='utf-8') as fh:
+        json.dump(vc, fh, indent=2, ensure_ascii=False)
+        fh.write('\n')
+for asset in ('style.css', 'app.js'):
     shutil.copy(os.path.join(HERE, asset), os.path.join(OUT, asset))
 
 json.dump(search_docs, open(f'{OUT}/search-index.json', 'w', encoding='utf-8'), ensure_ascii=False, separators=(',', ':'))

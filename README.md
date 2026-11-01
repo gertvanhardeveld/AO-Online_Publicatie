@@ -35,7 +35,7 @@ vercel --prod     # vaste URL van het project
 
 Of via Git: zet deze map in een repository, koppel die in Vercel aan een project en stel in:
 - Framework Preset: Other
-- Root Directory: `site`
+- Root Directory: leeg laten of `site`; beide werken (`vercel.json` in de hoofdmap verwijst naar `site/`)
 - Build Command: leeg laten
 
 Commit dan ook de gegenereerde map `site/`, want Vercel bouwt hier niets.
