@@ -22,22 +22,7 @@
   --font-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
   --r: 8px;
-}
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --bg: #0F151B; --surface: #161F28; --ink: #E3E9EF; --muted: #93A0AD; --line: #283542; --soft: #1D2833;
-    --accent: #78AEDD; --accent-soft: #1A2C3D; --on-accent: #0F151B; --ext: #E1A262; --ext-soft: #2B2116;
-    --risk: #EE8A7E; --risk-soft: #2D1B19; --ok: #7CC79C; color-scheme: dark;
-    --int: #3B82C4; --on-int: #FFFFFF; --int-line: #5B9AD3; --int-soft: #1F3A55; --int-soft-line: #4A86BE; --on-int-soft: #E3E9EF;
-    --xg: #2C343D; --xg-line: #3E4853; --on-xg: #D5DCE3;
-  }
-}
-:root[data-theme="dark"] {
-  --bg: #0F151B; --surface: #161F28; --ink: #E3E9EF; --muted: #93A0AD; --line: #283542; --soft: #1D2833;
-  --accent: #78AEDD; --accent-soft: #1A2C3D; --on-accent: #0F151B; --ext: #E1A262; --ext-soft: #2B2116;
-  --risk: #EE8A7E; --risk-soft: #2D1B19; --ok: #7CC79C; color-scheme: dark;
-    --int: #3B82C4; --on-int: #FFFFFF; --int-line: #5B9AD3; --int-soft: #1F3A55; --int-soft-line: #4A86BE; --on-int-soft: #E3E9EF;
-    --xg: #2C343D; --xg-line: #3E4853; --on-xg: #D5DCE3;
+  color-scheme: light; /* altijd licht, ook als de telefoon op donkere modus staat */
 }
 
 * { box-sizing: border-box; }

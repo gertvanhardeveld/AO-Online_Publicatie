@@ -124,7 +124,7 @@ def page(title, body, root, full=True, crumbs=None):
     inner = f'{head}\n{header}\n<main class="wrap main">{crumb}{body}</main>\n{footer}'
     if not full:
         return inner
-    return f'<!doctype html>\n<html lang="nl">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n{head}\n</head>\n<body>\n{header}\n<main class="wrap main">{crumb}{body}</main>\n{footer}\n</body>\n</html>'
+    return f'<!doctype html>\n<html lang="nl">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n<meta name="color-scheme" content="light">\n{head}\n</head>\n<body>\n{header}\n<main class="wrap main">{crumb}{body}</main>\n{footer}\n</body>\n</html>'
 
 
 def chip(rol):

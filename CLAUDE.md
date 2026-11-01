@@ -30,7 +30,7 @@ Nu: prototype om samen verder te ontwikkelen en te testen op Vercel.
   Pagina's: `p/` deelprocessen, `a/` activiteiten, `f/` functies, `index.html`, `search-index.json`.
 - `handboek.json`: voorbeelddata uit het DEMO-handboek (via `parse.py` uit een tekstuitdraai `hb.txt`).
   In productie komt deze data uit de AO-online-export (XML/database).
-- `style.css`, `app.js`: opmaak (tokens, licht en donker) en zoeken (MiniSearch via jsDelivr, met eenvoudige
+- `style.css`, `app.js`: opmaak (tokens, alleen licht: geen donkere modus, bewuste keuze) en zoeken (MiniSearch via jsDelivr, met eenvoudige
   terugvaloptie) plus schakelaar schemaweergave. Houd `app.js` ASCII (gebruik \u-escapes).
 - `vercel.json`, `robots.txt`: niet indexeren, beveiligingsheaders, geen caching van HTML/JSON.
 
