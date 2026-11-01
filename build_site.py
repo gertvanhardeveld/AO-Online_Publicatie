@@ -268,16 +268,21 @@ def sipoc_svg(d, root):
 
 def sipoc_steps(d, root):
     """Zelfde SIPOC-gegevens als verticale stappenlijst: leesbaar op een smal scherm."""
+    PIJL = '<svg class="varr" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg>'
+
     def io_html(it, richting):
+        """Een rij zoals in het schema: herkomst -> input, of output -> bestemming. Pijl geeft de richting."""
         tgt, _ = link_target(it['waar'])
         waar = e(it['waar'] or 'onbekend')
         if tgt: waar = f'<a href="{root}{tgt}">{waar}</a>'
         ext = '' if it['intern'] else ' ext'
-        voor = 'Van' if richting == 'in' else 'Naar'
-        return (f'<div class="vio{ext}"><span class="vwho">{voor} {waar}'
-                f'{"" if it["intern"] else " <span class=vext>extern</span>"}</span>'
-                f'<strong>{e(it["label"])}</strong>'
-                f'{"<small>" + icon_html(it["communicatie"]) + e(it["communicatie"]) + "</small>" if it.get("communicatie") else ""}</div>')
+        party = (f'<div class="vparty{ext}"><span class="vcap">{"Herkomst" if richting == "in" else "Bestemming"}'
+                 f'{"" if it["intern"] else " <span class=vext>extern</span>"}</span><span>{waar}</span></div>')
+        io = (f'<div class="vio{ext}"><span class="vcap">{"Input" if richting == "in" else "Output"}</span>'
+              f'<strong>{e(it["label"])}</strong>'
+              f'{"<small>" + icon_html(it["communicatie"]) + e(it["communicatie"]) + "</small>" if it.get("communicatie") else ""}</div>')
+        sr = f'<span class="sr">{"van" if richting == "in" else "naar"}</span>'
+        return f'<div class="vrow vr-{richting}">' + (party + PIJL + sr + io if richting == 'in' else io + PIJL + sr + party) + '</div>'
     li = ''
     for a in d['acts']:
         ins = [i for i in a.get('io', []) if i['richting'] == 'Input']

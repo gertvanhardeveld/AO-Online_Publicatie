@@ -273,15 +273,26 @@ button.link { font: inherit; background: none; border: 0; padding: 0; color: var
 .vact strong { font-size: 1rem; line-height: 1.3; }
 .vact small { font-size: .82rem; opacity: .85; }
 .vact:hover { background: var(--accent-soft); }
-.vgroup { display: grid; gap: 6px; }
-.vin { padding-right: 20px; }
-.vout { padding-left: 20px; }
-.vio { position: relative; display: grid; gap: 1px; background: var(--int); color: var(--on-int); border: 1px solid var(--int-line); border-radius: 6px; padding: 7px 10px; font-size: .9rem; min-width: 0; }
+.vgroup { display: grid; gap: 6px; position: relative; }
+/* pijl omlaag tussen inputs en activiteit, en tussen activiteit en outputs */
+.vin { padding-bottom: 18px; }
+.vout { padding-top: 16px; }
+.vin::after, .vout::before { content: ""; position: absolute; left: 50%; width: 0; height: 0; border: 6px solid transparent; border-top: 7px solid var(--muted); transform: translateX(-50%); }
+.vin::after { bottom: 2px; }
+.vout::before { top: 4px; }
+/* een rij zoals in het schema: herkomst -> input, output -> bestemming */
+.vrow { display: grid; align-items: stretch; gap: 4px; }
+.vrow.vr-in { grid-template-columns: minmax(0, 2fr) 18px minmax(0, 3fr); }
+.vrow.vr-out { grid-template-columns: minmax(0, 3fr) 18px minmax(0, 2fr); }
+.varr { align-self: center; width: 18px; height: 18px; fill: none; stroke: var(--muted); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+.vio, .vparty { display: grid; align-content: center; gap: 1px; border-radius: 6px; padding: 6px 9px; font-size: .88rem; min-width: 0; overflow-wrap: anywhere; }
+.vio { background: var(--int); color: var(--on-int); border: 1px solid var(--int-line); }
 .vio.ext { background: var(--xg); color: var(--on-xg); border-color: var(--xg-line); }
-.vin .vio::after, .vout .vio::before { position: absolute; left: 50%; color: var(--muted); font-size: .8rem; line-height: 1; transform: translateX(-50%); }
-.vwho { font-size: .72rem; text-transform: uppercase; letter-spacing: .05em; color: inherit; opacity: .85; overflow-wrap: anywhere; }
-.vwho a { color: inherit; }
-.vext { font-weight: 600; }
+.vparty { background: var(--int-soft); color: var(--on-int-soft); border: 1px solid var(--int-soft-line); }
+.vparty.ext { background: var(--xg); color: var(--on-xg); border-color: var(--xg-line); border-radius: 16px; }
+.vparty a { color: inherit; }
+.vcap { font-size: .66rem; text-transform: uppercase; letter-spacing: .06em; opacity: .8; }
+.vext { font-weight: 700; }
 .vio small { color: inherit; opacity: .85; font-size: .8rem; }
 @media (max-width: 760px) {
   .flowsec .schema { display: none; }
