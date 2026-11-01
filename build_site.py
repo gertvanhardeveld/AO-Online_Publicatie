@@ -98,14 +98,16 @@ def page(title, body, root, full=True, crumbs=None):
     head = f'''<title>{e(title)}</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 {FONTS}
-<link rel="stylesheet" href="{root}style.css">'''
+<link rel="stylesheet" href="{root}style.css">
+<link rel="icon" type="image/png" href="{root}assets/favicon.png">
+<link rel="apple-touch-icon" href="{root}assets/apple-touch-icon.png">'''
     crumb = ''
     if crumbs:
         crumb = '<nav class="crumbs" aria-label="Kruimelpad">' + ' <span aria-hidden="true">›</span> '.join(
             f'<a href="{root}{p}">{e(t)}</a>' if p is not None else f'<span>{e(t)}</span>' for t, p in crumbs) + '</nav>'
     header = f'''<div class="proto-band"><div class="wrap">Prototype statische publicatie · voorbeelddata uit het handboek {ORG}</div></div>
 <header class="top"><div class="wrap top-in">
-  <a class="brand" href="{root}index.html"><span class="brand-mark" aria-hidden="true">AO</span><span><strong>Kwaliteitshandboek</strong><small>{ORG}</small></span></a>
+  <a class="brand" href="{root}index.html"><img class="brand-logo" src="{root}assets/ao-online-logo.png" width="105" height="34" alt="AO-online"><span><strong>Kwaliteitshandboek</strong><small>{ORG}</small></span></a>
   <div class="search" role="search">
     <label class="sr" for="q">Zoek in het handboek</label>
     <input id="q" type="search" autocomplete="off" placeholder="Zoek processen, werkinstructies, functies…">
@@ -527,6 +529,9 @@ if not ARTIFACT:
     with open(os.path.join(OUT, 'vercel.json'), 'w', encoding='utf-8') as fh:
         json.dump(vc, fh, indent=2, ensure_ascii=False)
         fh.write('\n')
+os.makedirs(os.path.join(OUT, 'assets'), exist_ok=True)
+for asset in ('ao-online-logo.png', 'favicon.png', 'apple-touch-icon.png'):
+    shutil.copy(os.path.join(HERE, 'assets', asset), os.path.join(OUT, 'assets', asset))
 for asset in ('style.css', 'app.js'):
     shutil.copy(os.path.join(HERE, asset), os.path.join(OUT, asset))
 
